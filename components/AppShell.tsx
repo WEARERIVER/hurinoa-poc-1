@@ -72,8 +72,11 @@ export function AppShell({ children }: AppShellProps) {
     setMobileMenuOpen(false)
   }, [pathname])
 
-  // Determine active menu key from pathname
-  const activeKey = navigation.find((item) => pathname.startsWith(item.path))?.key || navigation[0]?.key
+  // Determine active menu key from pathname (find most specific match)
+  const activeKey = navigation
+    .filter((item) => pathname === item.path || pathname.startsWith(item.path + '/'))
+    .sort((a, b) => b.path.length - a.path.length)[0]?.key 
+    || navigation[0]?.key
 
   // Use Link components for navigation to enable prefetching
   const menuItems = navigation.map((item) => ({

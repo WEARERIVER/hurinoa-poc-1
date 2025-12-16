@@ -11,6 +11,7 @@ import {
 import Link from 'next/link'
 import { PageHeader } from '@/components'
 import { getNavItem } from '@/lib/navigation'
+import { getEventStats } from '@/lib/mockData'
 import { primary, secondary, tertiary, neutral, layout, borderRadius } from '@/theme'
 
 const { Title, Paragraph, Text } = Typography
@@ -21,9 +22,10 @@ const navItem = getNavItem('admin-dashboard')!
  * Contributor Dashboard
  * =====================
  * Landing page for contributors. Shows quick actions and overview stats.
- * This is a placeholder that will be enhanced when event data is available.
  */
 export default function AdminDashboardPage() {
+  const stats = getEventStats()
+
   return (
     <>
       <PageHeader
@@ -31,7 +33,7 @@ export default function AdminDashboardPage() {
         description="Contributor Dashboard — Manage your kaupapa events"
         breadcrumbs={[{ label: 'Dashboard' }]}
         actions={
-          <Link href="/admin/events/create">
+          <Link href="/admin/events">
             <Button type="primary" icon={<PlusOutlined />}>
               Create Event
             </Button>
@@ -45,7 +47,7 @@ export default function AdminDashboardPage() {
           <Card bordered={false}>
             <Statistic
               title="Upcoming Events"
-              value={0}
+              value={stats.upcoming}
               prefix={<CalendarOutlined style={{ color: primary[500] }} />}
             />
           </Card>
@@ -54,7 +56,7 @@ export default function AdminDashboardPage() {
           <Card bordered={false}>
             <Statistic
               title="This Week"
-              value={0}
+              value={stats.thisWeek}
               prefix={<ClockCircleOutlined style={{ color: secondary[500] }} />}
             />
           </Card>
@@ -63,7 +65,7 @@ export default function AdminDashboardPage() {
           <Card bordered={false}>
             <Statistic
               title="Past Events"
-              value={0}
+              value={stats.past}
               prefix={<CheckCircleOutlined style={{ color: tertiary[500] }} />}
             />
           </Card>

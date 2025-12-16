@@ -1,3 +1,5 @@
 export { AppShell } from './AppShell'
 export { PageHeader } from './PageHeader'
+export { EventCalendar } from './EventCalendar'
+export type { CalendarEvent, EventCalendarProps } from './EventCalendar'
 export type { BreadcrumbItem } from './PageHeader'
