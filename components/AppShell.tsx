@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Layout, Menu, Input, Avatar, Space, Typography, Dropdown, Drawer, Grid, App, Tag } from 'antd'
+import { Layout, Menu, Input, Avatar, Space, Typography, Dropdown, Drawer, Grid, App, Tag, Switch, Tooltip } from 'antd'
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -17,6 +17,7 @@ import {
 } from '@ant-design/icons'
 import { getNavigationForUserType, getUserTypeFromPath, getHomePathForUserType } from '@/lib/navigation'
 import { useUser, UserType } from '@/lib/userContext'
+import { usePocMode } from '@/lib/pocModeContext'
 import { primary, secondary, tertiary, neutral, layout, borderRadius } from '@/theme'
 
 const { Header, Sider, Content } = Layout
@@ -52,6 +53,7 @@ export function AppShell({ children }: AppShellProps) {
   const screens = useBreakpoint()
   const { message } = App.useApp()
   const { user, switchUser } = useUser()
+  const { showPocHelpers, togglePocHelpers } = usePocMode()
   
   // Determine if we're on mobile
   const isMobile = !screens.lg
@@ -300,8 +302,34 @@ export function AppShell({ children }: AppShellProps) {
             )}
           </div>
 
-          {/* Right side: User Avatar with Dropdown */}
-          <Dropdown 
+          {/* Right side: POC Toggle + User Avatar */}
+          <Space size={isMobile ? 8 : 16}>
+            {/* POC Helpers Toggle */}
+            <Tooltip title="Show POC Context">
+              <div 
+                style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: 8,
+                  padding: '4px 10px',
+                  borderRadius: borderRadius.lg,
+                  background: neutral[100],
+                  cursor: 'pointer',
+                  transition: 'background 0.2s',
+                }}
+                onClick={togglePocHelpers}
+              >
+                <Switch 
+                  size="small" 
+                  checked={showPocHelpers} 
+                />
+                {!isMobile && (
+                  <Text style={{ fontSize: 13, color: neutral[600], userSelect: 'none' }}>Context</Text>
+                )}
+              </div>
+            </Tooltip>
+
+            <Dropdown 
             menu={{ 
               items: userMenuItems,
               onClick: ({ key }) => {
@@ -319,10 +347,11 @@ export function AppShell({ children }: AppShellProps) {
             <Space 
               style={{ 
                 cursor: 'pointer',
-                padding: '6px 12px',
-                borderRadius: borderRadius.lg,
+                padding: '2px 8px',
+                borderRadius: borderRadius.md,
                 transition: 'background 0.2s',
                 flexShrink: 0,
+                height: 48,
               }}
               onMouseEnter={(e) => e.currentTarget.style.backgroundColor = neutral[100]}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
@@ -334,13 +363,14 @@ export function AppShell({ children }: AppShellProps) {
               />
               {/* User name and type - hide on mobile */}
               {!isMobile && (
-                <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.3 }}>
-                  <Text style={{ color: neutral[700], fontWeight: 500 }}>{user.name}</Text>
-                  <Text style={{ color: userTypeColor, fontSize: 12 }}>{userTypeLabel}</Text>
+                <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
+                  <Text style={{ color: neutral[700], fontWeight: 500, fontSize: 14 }}>{user.name}</Text>
+                  <Text style={{ color: userTypeColor, fontSize: 12, marginTop: -2 }}>{userTypeLabel}</Text>
                 </div>
               )}
             </Space>
           </Dropdown>
+          </Space>
         </Header>
 
         {/* ================================================================== */}

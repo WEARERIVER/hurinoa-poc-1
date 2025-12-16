@@ -9,7 +9,7 @@ import {
   CheckCircleOutlined 
 } from '@ant-design/icons'
 import Link from 'next/link'
-import { PageHeader } from '@/components'
+import { PageHeader, PocContextCard } from '@/components'
 import { getNavItem } from '@/lib/navigation'
 import { getEventStats } from '@/lib/mockData'
 import { primary, secondary, tertiary, neutral, layout, borderRadius } from '@/theme'
@@ -40,6 +40,13 @@ export default function AdminDashboardPage() {
           </Link>
         }
       />
+
+      <PocContextCard>
+        This is the <strong>Contributor Dashboard</strong> — the home screen for kaupapa administrators. 
+        Contributors can see a quick overview of their upcoming events, access key actions, and navigate 
+        to manage events or users. This demonstrates the "contributor view" of the platform where 
+        event coordination happens.
+      </PocContextCard>
 
       {/* Quick Stats */}
       <Row gutter={[layout.cardGap, layout.cardGap]} style={{ marginBottom: layout.sectionGap }}>

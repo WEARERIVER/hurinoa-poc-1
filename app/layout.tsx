@@ -4,6 +4,7 @@ import { AntdRegistry } from '@ant-design/nextjs-registry'
 import { ConfigProvider, App } from 'antd'
 import { theme } from '@/theme'
 import { UserProvider } from '@/lib/userContext'
+import { PocModeProvider } from '@/lib/pocModeContext'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -36,7 +37,9 @@ export default function RootLayout({
           <ConfigProvider theme={theme}>
             <App>
               <UserProvider>
-                {children}
+                <PocModeProvider>
+                  {children}
+                </PocModeProvider>
               </UserProvider>
             </App>
           </ConfigProvider>
