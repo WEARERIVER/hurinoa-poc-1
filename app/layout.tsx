@@ -8,7 +8,7 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: 'Huri Noa POC',
-  description: 'AI Starter Kit for Rapid Development',
+  description: 'Huri Noa Proof of Concept for Contributor Event Coordination and Uri Calendars',
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: 'any' },
