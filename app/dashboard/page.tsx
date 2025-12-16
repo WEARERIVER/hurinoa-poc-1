@@ -45,7 +45,7 @@ import { primary, secondary, neutral, layout, fontSize, borderRadius } from '@/t
 const { Text } = Typography
 const { useBreakpoint } = Grid
 
-const navItem = getNavItem('dashboard')!
+const navItem = getNavItem('dev-dashboard')!
 
 // ============================================================================
 // DESIGN TOKENS

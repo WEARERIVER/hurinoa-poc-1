@@ -55,7 +55,7 @@ import { primary, secondary, neutral, semantic, layout, fontSize, borderRadius }
 const { Title, Text, Paragraph } = Typography
 const { useBreakpoint } = Grid
 
-const navItem = getNavItem('docs')!
+const navItem = getNavItem('dev-docs')!
 
 // ============================================================================
 // MODERN DESIGN STYLES

@@ -1,9 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Layout, Menu, Input, Avatar, Space, Typography, Dropdown, Drawer, Grid, App } from 'antd'
+import { Layout, Menu, Input, Avatar, Space, Typography, Dropdown, Drawer, Grid, App, Tag } from 'antd'
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -13,9 +13,11 @@ import {
   SettingOutlined,
   LogoutOutlined,
   CloseOutlined,
+  SwapOutlined,
 } from '@ant-design/icons'
-import { navigation } from '@/lib/navigation'
-import { primary, secondary, neutral, layout, borderRadius } from '@/theme'
+import { getNavigationForUserType, getUserTypeFromPath, getHomePathForUserType } from '@/lib/navigation'
+import { useUser, UserType } from '@/lib/userContext'
+import { primary, secondary, tertiary, neutral, layout, borderRadius } from '@/theme'
 
 const { Header, Sider, Content } = Layout
 const { Text } = Typography
@@ -28,28 +30,42 @@ interface AppShellProps {
 /**
  * AppShell Component
  * ==================
- * Main layout wrapper for all pages.
+ * Main layout wrapper for all app pages (contributor, uri, and developer).
  * 
  * Responsive behavior:
  * - Desktop (lg+): Fixed sidebar with collapse toggle
  * - Mobile (<lg): Hidden sidebar with hamburger menu + drawer
  * 
  * Structure:
- * - Sidebar: Logo + primary navigation
- * - Header: Toggle, search, user menu
+ * - Sidebar: Logo + role-based navigation
+ * - Header: Toggle, search, user menu with role switching
  * - Content: Page content area
  * 
+ * Auto-detects user type from URL and syncs context.
  * Uses layout tokens from theme/tokens.ts for consistent sizing.
  */
 export function AppShell({ children }: AppShellProps) {
   const [collapsed, setCollapsed] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const pathname = usePathname()
+  const router = useRouter()
   const screens = useBreakpoint()
   const { message } = App.useApp()
+  const { user, switchUser } = useUser()
   
   // Determine if we're on mobile
   const isMobile = !screens.lg
+
+  // Auto-detect user type from URL and sync context
+  useEffect(() => {
+    const detectedType = getUserTypeFromPath(pathname)
+    if (detectedType && detectedType !== user.type) {
+      switchUser(detectedType)
+    }
+  }, [pathname, user.type, switchUser])
+
+  // Get navigation based on user type
+  const navigation = getNavigationForUserType(user.type)
   
   // Close mobile menu on route change
   useEffect(() => {
@@ -57,7 +73,7 @@ export function AppShell({ children }: AppShellProps) {
   }, [pathname])
 
   // Determine active menu key from pathname
-  const activeKey = navigation.find((item) => pathname.startsWith(item.path))?.key || 'dashboard'
+  const activeKey = navigation.find((item) => pathname.startsWith(item.path))?.key || navigation[0]?.key
 
   // Use Link components for navigation to enable prefetching
   const menuItems = navigation.map((item) => ({
@@ -66,9 +82,48 @@ export function AppShell({ children }: AppShellProps) {
     label: <Link href={item.path} style={{ color: 'inherit' }}>{item.label}</Link>,
   }))
 
+  // Handle profile switch — navigates to the selected role's dashboard
+  const handleSwitchProfile = (newType: UserType) => {
+    switchUser(newType)
+    router.push(getHomePathForUserType(newType))
+    const label = newType === 'contributor' ? 'Contributor' : newType === 'uri' ? 'Uri' : 'Developer'
+    message.success(`Switched to ${label} view`)
+  }
+
+  // User type display label and color
+  const getUserTypeLabel = (type: UserType) => {
+    switch (type) {
+      case 'contributor': return 'Contributor'
+      case 'uri': return 'Uri'
+      case 'developer': return 'Developer'
+    }
+  }
+  const getUserTypeColor = (type: UserType) => {
+    switch (type) {
+      case 'contributor': return primary[500]
+      case 'uri': return tertiary[500]
+      case 'developer': return secondary[500]
+    }
+  }
+  
+  const userTypeLabel = getUserTypeLabel(user.type)
+  const userTypeColor = getUserTypeColor(user.type)
+
+  // Build switch menu items (exclude current type)
+  const switchOptions: UserType[] = ['contributor', 'uri', 'developer']
+  const switchMenuItems = switchOptions
+    .filter(type => type !== user.type)
+    .map(type => ({
+      key: `switch-${type}`,
+      icon: <SwapOutlined />,
+      label: `Switch to ${getUserTypeLabel(type)}`,
+    }))
+
   const userMenuItems = [
     { key: 'profile', icon: <UserOutlined />, label: 'Profile' },
     { key: 'settings', icon: <SettingOutlined />, label: 'Settings' },
+    { type: 'divider' as const },
+    ...switchMenuItems,
     { type: 'divider' as const },
     { key: 'logout', icon: <LogoutOutlined style={{ color: primary[500] }} />, label: <span style={{ color: primary[500] }}>Sign out</span> },
   ]
@@ -249,6 +304,9 @@ export function AppShell({ children }: AppShellProps) {
               onClick: ({ key }) => {
                 if (key === 'logout') {
                   message.success('Successfully logged out')
+                } else if (key.startsWith('switch-')) {
+                  const newType = key.replace('switch-', '') as UserType
+                  handleSwitchProfile(newType)
                 }
               }
             }} 
@@ -262,8 +320,6 @@ export function AppShell({ children }: AppShellProps) {
                 borderRadius: borderRadius.lg,
                 transition: 'background 0.2s',
                 flexShrink: 0,
-                height: 44,
-                maxHeight: 44,
               }}
               onMouseEnter={(e) => e.currentTarget.style.backgroundColor = neutral[100]}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
@@ -271,10 +327,15 @@ export function AppShell({ children }: AppShellProps) {
               <Avatar 
                 size={32} 
                 icon={<UserOutlined />} 
-                style={{ backgroundColor: secondary[500] }} 
+                style={{ backgroundColor: userTypeColor }} 
               />
-              {/* Hide username on mobile */}
-              {!isMobile && <Text style={{ color: neutral[700] }}>User</Text>}
+              {/* User name and type - hide on mobile */}
+              {!isMobile && (
+                <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.3 }}>
+                  <Text style={{ color: neutral[700], fontWeight: 500 }}>{user.name}</Text>
+                  <Text style={{ color: userTypeColor, fontSize: 12 }}>{userTypeLabel}</Text>
+                </div>
+              )}
             </Space>
           </Dropdown>
         </Header>

@@ -3,7 +3,7 @@ import '@ant-design/v5-patch-for-react-19'
 import { AntdRegistry } from '@ant-design/nextjs-registry'
 import { ConfigProvider, App } from 'antd'
 import { theme } from '@/theme'
-import { AppShell } from '@/components'
+import { UserProvider } from '@/lib/userContext'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -35,7 +35,9 @@ export default function RootLayout({
         <AntdRegistry>
           <ConfigProvider theme={theme}>
             <App>
-              {children}
+              <UserProvider>
+                {children}
+              </UserProvider>
             </App>
           </ConfigProvider>
         </AntdRegistry>

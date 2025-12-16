@@ -94,7 +94,7 @@ const { Title, Text, Paragraph } = Typography
 const { TextArea } = Input
 const { useBreakpoint } = Grid
 
-const navItem = getNavItem('design')!
+const navItem = getNavItem('dev-design')!
 
 // ============================================================================
 // MODERN DESIGN STYLES
