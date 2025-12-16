@@ -1,5 +1,5 @@
 import type { ThemeConfig } from 'antd'
-import { primary, secondary, neutral, fontFamily, fontSize, borderRadius, shadow } from './tokens'
+import { primary, secondary, tertiary, neutral, fontFamily, fontSize, borderRadius, shadow } from './tokens'
 
 /**
  * Ant Design Theme Configuration
@@ -8,7 +8,8 @@ import { primary, secondary, neutral, fontFamily, fontSize, borderRadius, shadow
  * 
  * Design Direction: Warm, approachable, grounded
  * - Coral/terracotta primary for energy and warmth
- * - Warm teal secondary for balance
+ * - Horizon Red secondary for gradients and accents
+ * - Warm teal tertiary for success/balance
  * - Warm-tinted neutrals for a softer feel
  * 
  * Source of truth: ./tokens.ts
@@ -24,8 +25,8 @@ const theme: ThemeConfig = {
     colorLinkHover: primary[500],
     colorLinkActive: primary[700],
     
-    // Success colour — warm teal
-    colorSuccess: secondary[500],
+    // Success colour — warm teal (now tertiary)
+    colorSuccess: tertiary[500],
     
     // Text colours — warm neutrals
     colorTextBase: neutral[800],
@@ -61,6 +62,10 @@ const theme: ThemeConfig = {
     boxShadowSecondary: shadow.md,
   },
   components: {
+    Typography: {
+      fontFamilyCode: fontFamily.mono,
+      fontFamily: fontFamily.heading,
+    },
     Button: {
       primaryShadow: 'none',
       borderRadius: borderRadius.md,

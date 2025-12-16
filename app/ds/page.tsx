@@ -88,7 +88,7 @@ import {
 } from '@ant-design/icons'
 import { PageHeader } from '@/components'
 import { getNavItem } from '@/lib/navigation'
-import { primary, secondary, neutral, semantic, fontFamily, fontSize, headings, layout, borderRadius } from '@/theme'
+import { primary, secondary, tertiary, neutral, semantic, fontFamily, fontSize, headings, layout, borderRadius } from '@/theme'
 
 const { Title, Text, Paragraph } = Typography
 const { TextArea } = Input
@@ -457,7 +457,12 @@ function ColoursTab() {
         <ColourPalette
           name="Secondary"
           palette={secondary}
-          usage="Success states, positive actions, confirmations"
+          usage="Gradients, accents, highlights (Horizon Red)"
+        />
+        <ColourPalette
+          name="Tertiary"
+          palette={tertiary}
+          usage="Success states, positive actions, confirmations (Warm Teal)"
         />
         <ColourPalette
           name="Neutral"
@@ -500,10 +505,11 @@ function ColoursTab() {
           style={{ borderRadius: borderRadius.md, overflow: 'hidden' }}
           dataSource={[
             { key: '1', token: 'Primary', use: 'Buttons, links, active navigation, focus rings', avoid: 'Large background areas' },
-            { key: '2', token: 'Secondary', use: 'Success messages, positive actions, confirmations', avoid: 'Primary actions' },
-            { key: '3', token: 'Neutral 50-200', use: 'Backgrounds, cards, subtle dividers', avoid: 'Text (low contrast)' },
-            { key: '4', token: 'Neutral 500-900', use: 'Body text, headings, icons', avoid: 'Backgrounds (too dark)' },
-            { key: '5', token: 'Semantic', use: 'Alerts, validation, status badges', avoid: 'Decorative elements' },
+            { key: '2', token: 'Secondary', use: 'Gradients, accents, highlights', avoid: 'Primary actions' },
+            { key: '3', token: 'Tertiary', use: 'Success messages, positive actions', avoid: 'Overuse' },
+            { key: '4', token: 'Neutral 50-200', use: 'Backgrounds, cards, subtle dividers', avoid: 'Text (low contrast)' },
+            { key: '5', token: 'Neutral 500-900', use: 'Body text, headings, icons', avoid: 'Backgrounds (too dark)' },
+            { key: '6', token: 'Semantic', use: 'Alerts, validation, status badges', avoid: 'Decorative elements' },
           ]}
           columns={[
             { title: 'Token', dataIndex: 'token', key: 'token', width: 120 },
@@ -539,16 +545,27 @@ function TypographyTab() {
       <Section title="Font Family" icon={<FontSizeOutlined style={{ color: primary[500] }} />}>
         <Row gutter={24}>
           <Col xs={24} md={12}>
-            <Card size="small" style={{ background: gradients.blueCard, borderRadius: borderRadius.lg }}>
-              <Text strong style={{ fontSize: 24, display: 'block', marginBottom: 8 }}>Inter</Text>
+            <Card size="small" style={{ background: gradients.blueCard, borderRadius: borderRadius.lg, marginBottom: 16 }}>
+              <Text strong style={{ fontSize: 24, display: 'block', marginBottom: 8, fontFamily: 'Outfit, sans-serif' }}>Outfit</Text>
               <Text type="secondary">
-                A clean, modern sans-serif designed for screen readability.
+                A bold, modern sans-serif for headings and display text.
+              </Text>
+            </Card>
+            <Card size="small" style={{ background: gradients.greenCard, borderRadius: borderRadius.lg }}>
+              <Text strong style={{ fontSize: 24, display: 'block', marginBottom: 8 }}>Plus Jakarta Sans</Text>
+              <Text type="secondary">
+                A clean, modern sans-serif designed for screen readability (Body).
               </Text>
             </Card>
           </Col>
           <Col xs={24} md={12}>
             <Card size="small" style={{ backgroundColor: neutral[800], borderRadius: borderRadius.lg }}>
-              <Text code style={{ fontSize: 12, color: neutral[100], background: 'transparent' }}>{fontFamily.base}</Text>
+              <Text code style={{ fontSize: 12, color: neutral[100], background: 'transparent', display: 'block', marginBottom: 8 }}>
+                Heading: {fontFamily.heading}
+              </Text>
+              <Text code style={{ fontSize: 12, color: neutral[100], background: 'transparent' }}>
+                Body: {fontFamily.base}
+              </Text>
             </Card>
           </Col>
         </Row>

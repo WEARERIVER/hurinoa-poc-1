@@ -43,18 +43,37 @@ export const primary = {
 } as const
 
 /**
- * Secondary Colour Palette — Warm Teal/Jade
+ * Secondary Colour Palette — Horizon Red
+ * Used for: Gradients, accents, highlights
+ * 
+ * Rich red that creates a beautiful sunset gradient with the primary coral.
+ */
+export const secondary = {
+  50: '#fff5f5',
+  100: '#ffe3e3',
+  200: '#ffc9c9',
+  300: '#ffa8a8',
+  400: '#fa6b6b',
+  500: '#F03E3E', // Base secondary — horizon red
+  600: '#e03131',
+  700: '#c92a2a',
+  800: '#b02525',
+  900: '#962020',
+} as const
+
+/**
+ * Tertiary Colour Palette — Warm Teal/Jade (Formerly Secondary)
  * Used for: Success states, positive actions, confirmations
  * 
  * Warm teal that complements the coral primary.
  */
-export const secondary = {
+export const tertiary = {
   50: '#edf8f6',
   100: '#d5f0eb',
   200: '#a8e0d6',
   300: '#74cbbf',
   400: '#4ab5a6',
-  500: '#2D8B7A', // Base secondary — warm teal
+  500: '#2D8B7A', // Base tertiary — warm teal
   600: '#267566',
   700: '#1f5f53',
   800: '#184a41',
@@ -94,7 +113,7 @@ export const semantic = {
   },
   success: {
     light: '#ecfdf5',
-    base: '#2D8B7A', // Uses secondary teal for cohesion
+    base: '#2D8B7A', // Uses tertiary teal for cohesion
     dark: '#1f5f53',
   },
   warning: {
@@ -121,6 +140,7 @@ export const semantic = {
  */
 export const fontFamily = {
   base: "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+  heading: "'Outfit', sans-serif",
   mono: "'SF Mono', 'Fira Code', 'Fira Mono', Menlo, Consolas, 'DejaVu Sans Mono', monospace",
 } as const
 
@@ -265,6 +285,7 @@ export const tokens = {
   colors: {
     primary,
     secondary,
+    tertiary,
     neutral,
     semantic,
   },
