@@ -7,7 +7,7 @@ import { AppShell } from '@/components'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Huri Noa POC 1',
+  title: 'Huri Noa POC',
   description: 'AI Starter Kit for Rapid Development',
   icons: {
     icon: [

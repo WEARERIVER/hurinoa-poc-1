@@ -12,7 +12,10 @@ import {
   ClockCircleOutlined,
   ThunderboltOutlined,
   CheckCircleOutlined,
-  RocketOutlined
+  RocketOutlined,
+  CheckCircleFilled,
+  CloseCircleFilled,
+  WarningFilled
 } from '@ant-design/icons'
 import { primary, secondary, tertiary, neutral, borderRadius } from '@/theme'
 
@@ -58,15 +61,14 @@ export default function ProjectStoryPage() {
             backdropFilter: 'blur(10px)'
           }}>
             <Text style={{ color: primary[300], fontWeight: 600, letterSpacing: 1, textTransform: 'uppercase' }}>
-              Huri Noa POC 1
+              Huri Noa POC
             </Text>
           </div>
           <Title style={{ color: '#fff', fontSize: 72, marginBottom: 24, letterSpacing: '-0.03em', lineHeight: 1.1 }}>
             Project Vision
           </Title>
           <Paragraph style={{ fontSize: 24, color: neutral[300], maxWidth: 600, margin: '0 auto', lineHeight: 1.5 }}>
-            From complex coordination to simple clarity. <br/>
-            The story behind the platform.
+            An interactive prototype demonstrating the core scheduling and coordination workflows for Huri Noa.
           </Paragraph>
         </div>
       </div>
@@ -86,7 +88,7 @@ export default function ProjectStoryPage() {
         }}>
           <Row gutter={[48, 48]} align="middle">
             <Col xs={24} md={10}>
-              <Title level={3} style={{ fontSize: 32, marginBottom: 16 }}>Why This Version?</Title>
+              <Title level={3} style={{ fontSize: 32, marginBottom: 16 }}>About this POC</Title>
               <div style={{ width: 60, height: 4, background: primary[500], borderRadius: 2 }} />
             </Col>
             <Col xs={24} md={14}>
@@ -280,6 +282,118 @@ export default function ProjectStoryPage() {
             <Text style={{ color: neutral[500] }}>
               * No calendar sync or RSVP in this phase (by design)
             </Text>
+          </div>
+        </div>
+      </div>
+
+      {/* ================================================================== */}
+      {/* MVP SCOPE                                                          */}
+      {/* ================================================================== */}
+      <div style={{ padding: '100px 24px', background: neutral[50] }}>
+        <div style={{ maxWidth: 1000, margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 64 }}>
+            <Title level={2}>MVP Scope & Focus</Title>
+            <Paragraph style={{ fontSize: 18, color: neutral[500], maxWidth: 800, margin: '0 auto' }}>
+              Based on feedback in our last workshop, we’ve refined the focus of this Proof of Concept (POC) to prioritise supporting Contributors to easily create events without clashes across entities.
+            </Paragraph>
+            <Paragraph style={{ fontSize: 18, color: neutral[500], maxWidth: 800, margin: '16px auto 0' }}>
+              While earlier thinking centred around personalised calendar views for Uri, the clearest and most pressing need expressed was <strong>"a way for Contributors to create events without double-ups or conflicts"</strong>.
+            </Paragraph>
+          </div>
+
+          <Row gutter={[48, 48]}>
+            <Col xs={24} md={12}>
+              <Card 
+                title={<Space><CheckCircleFilled style={{ color: tertiary[500] }} /> In Scope (The Focus)</Space>} 
+                bordered={false} 
+                style={{ height: '100%', borderRadius: 16 }}
+              >
+                <Paragraph type="secondary" style={{ marginBottom: 24 }}>
+                  What we're delivering in the POC:
+                </Paragraph>
+                <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+                  <div style={{ display: 'flex', gap: 12 }}>
+                    <CheckCircleOutlined style={{ color: tertiary[500], fontSize: 20 }} />
+                    <Text style={{ fontSize: 16 }}>Contributor Event Creation</Text>
+                  </div>
+                  <div style={{ display: 'flex', gap: 12 }}>
+                    <CheckCircleOutlined style={{ color: tertiary[500], fontSize: 20 }} />
+                    <Text style={{ fontSize: 16 }}>Soft Clash Detection</Text>
+                  </div>
+                  <div style={{ display: 'flex', gap: 12 }}>
+                    <CheckCircleOutlined style={{ color: tertiary[500], fontSize: 20 }} />
+                    <Text style={{ fontSize: 16 }}>Basic Uri Visibility (name only)</Text>
+                  </div>
+                  <div style={{ display: 'flex', gap: 12 }}>
+                    <CheckCircleOutlined style={{ color: tertiary[500], fontSize: 20 }} />
+                    <Text style={{ fontSize: 16 }}>Manual User Import</Text>
+                  </div>
+                </Space>
+                <Divider style={{ margin: '24px 0' }} />
+                <div style={{ background: tertiary[50], padding: 16, borderRadius: 8, color: tertiary[800] }}>
+                  <Paragraph style={{ margin: '8px 0 0', fontSize: 14, color: tertiary[800] }}>
+                    These deliverables reflect the critical coordination needs of Contributors, enabling them to plan events across entities with clarity and minimal friction.
+                  </Paragraph>
+                </div>
+              </Card>
+            </Col>
+            <Col xs={24} md={12}>
+              <Card 
+                title={<Space><CloseCircleFilled style={{ color: secondary[500] }} /> Out of Scope (Deferred)</Space>} 
+                bordered={false} 
+                style={{ height: '100%', borderRadius: 16, opacity: 0.9 }}
+              >
+                <Paragraph type="secondary" style={{ marginBottom: 24 }}>
+                  What we are not including — yet:
+                </Paragraph>
+                <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+                  <div style={{ display: 'flex', gap: 12 }}>
+                    <ClockCircleOutlined style={{ color: neutral[400], fontSize: 20 }} />
+                    <Text style={{ fontSize: 16, color: neutral[500] }}>Calendar Sync (.ics feeds)</Text>
+                  </div>
+                  <div style={{ display: 'flex', gap: 12 }}>
+                    <ClockCircleOutlined style={{ color: neutral[400], fontSize: 20 }} />
+                    <Text style={{ fontSize: 16, color: neutral[500] }}>RSVPs & Notifications</Text>
+                  </div>
+                  <div style={{ display: 'flex', gap: 12 }}>
+                    <ClockCircleOutlined style={{ color: neutral[400], fontSize: 20 }} />
+                    <Text style={{ fontSize: 16, color: neutral[500] }}>Self-Registration (Uri sign-up)</Text>
+                  </div>
+                </Space>
+                <Divider style={{ margin: '24px 0' }} />
+                <div style={{ background: neutral[100], padding: 16, borderRadius: 8, fontStyle: 'italic', color: neutral[600] }}>
+                  “It’s really important that events across different rōpū aren’t public to everyone... Uri only need to see what’s relevant to them.”
+                  <div style={{ marginTop: 8, fontSize: 12, fontWeight: 600, fontStyle: 'normal' }}>— Mina Mathieson</div>
+                </div>
+              </Card>
+            </Col>
+          </Row>
+
+          <div style={{ marginTop: 64 }}>
+            <div style={{ textAlign: 'center', marginBottom: 32 }}>
+              <Title level={3} style={{ marginBottom: 8 }}>Key Risks & Mitigations</Title>
+              <Paragraph style={{ color: neutral[500], fontSize: 16 }}>
+                We are proactively managing these risks to ensure the POC remains focused and deliverable.
+              </Paragraph>
+            </div>
+            <Row gutter={[24, 24]}>
+              {[
+                { title: "Scope Creep", desc: "We’ve deliberately constrained the MVP to focus on coordination, not full user autonomy or comms." },
+                { title: "Security Exposure", desc: "Uri calendar feeds have been deprioritised until robust permissioning is in place." },
+                { title: "Mismatch of Expectations", desc: "This POC is explicitly designed to test Contributor coordination first. Clear comms will ensure alignment." },
+                { title: "Underwhelming for Uri", desc: "The value for Uri will grow in future phases. For now, they benefit passively through better organised events." }
+              ].map((risk, i) => (
+                <Col xs={24} md={12} key={i}>
+                  <div style={{ background: '#fff', padding: 24, borderRadius: 12, border: `1px solid ${neutral[200]}`, height: '100%' }}>
+                    <Space align="start" style={{ marginBottom: 8 }}>
+                      <WarningFilled style={{ color: secondary[500], fontSize: 20, marginTop: 4 }} />
+                      <Text strong style={{ color: neutral[800], fontSize: 16 }}>{risk.title}</Text>
+                    </Space>
+                    <Paragraph style={{ color: neutral[600], margin: 0, paddingLeft: 28 }}>{risk.desc}</Paragraph>
+                  </div>
+                </Col>
+              ))}
+            </Row>
           </div>
         </div>
       </div>

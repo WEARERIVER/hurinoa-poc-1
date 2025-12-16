@@ -122,7 +122,7 @@ export function AppShell({ children }: AppShellProps) {
       </div>
       {showText && (
         <Text strong style={{ marginLeft: 12, fontSize: 16, color: neutral[800], letterSpacing: '-0.02em' }}>
-          Huri Noa
+          Huri Noa POC
         </Text>
       )}
     </div>

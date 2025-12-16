@@ -57,7 +57,7 @@ export default function MarketingLayout({
             H
           </div>
           <Text strong style={{ marginLeft: 12, fontSize: 18, color: neutral[800], letterSpacing: '-0.02em' }}>
-            Huri Noa
+            Huri Noa POC
           </Text>
         </Link>
 
