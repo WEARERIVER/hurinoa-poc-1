@@ -103,7 +103,15 @@ export default function MarketingLayout({
         </Text>
         <br />
         <Text style={{ color: neutral[500], fontSize: 13, marginTop: 8, display: 'inline-block' }}>
-          Built with care for our communities
+          Built with care for our communities | Powered by{' '}
+          <a
+            href="https://www.weareriver.nz"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: neutral[400], textDecoration: 'none', fontWeight: 500 }}
+          >
+            RIVER Group
+          </a>
         </Text>
       </Footer>
     </Layout>
