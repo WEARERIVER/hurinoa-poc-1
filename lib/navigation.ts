@@ -6,6 +6,7 @@ import {
   ReadOutlined,
   FormatPainterOutlined,
   CodeOutlined,
+  UserOutlined,
 } from '@ant-design/icons'
 import { UserType } from './userContext'
 
@@ -45,6 +46,13 @@ export const contributorNavigation: NavItem[] = [
     label: 'Users',
     description: 'Manage uri and user assignments',
     icon: TeamOutlined,
+  },
+  {
+    key: 'admin-profile',
+    path: '/admin/profile',
+    label: 'My Profile',
+    description: 'View your account details',
+    icon: UserOutlined,
   },
 ]
 

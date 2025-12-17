@@ -122,9 +122,9 @@ export const semantic = {
     dark: '#b45309',
   },
   error: {
-    light: '#fef2f2',
-    base: '#ef4444',
-    dark: '#b91c1c',
+    light: '#fef5f3',
+    base: '#d94a3d',   // Warmer red, closer to brand coral
+    dark: '#b83a2f',
   },
 } as const
 

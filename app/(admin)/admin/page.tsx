@@ -11,7 +11,7 @@ import {
 import Link from 'next/link'
 import { PageHeader, PocContextCard } from '@/components'
 import { getNavItem } from '@/lib/navigation'
-import { getEventStats } from '@/lib/mockData'
+import { getEventStats, getUriStats } from '@/lib/mockData'
 import { primary, secondary, tertiary, neutral, layout, borderRadius } from '@/theme'
 
 const { Title, Paragraph, Text } = Typography
@@ -25,6 +25,7 @@ const navItem = getNavItem('admin-dashboard')!
  */
 export default function AdminDashboardPage() {
   const stats = getEventStats()
+  const uriStats = getUriStats()
 
   return (
     <>
@@ -91,7 +92,7 @@ export default function AdminDashboardPage() {
           <Card bordered={false}>
             <Statistic
               title="Uri Connected"
-              value={0}
+              value={uriStats.total}
               prefix={<TeamOutlined style={{ color: neutral[500] }} />}
             />
           </Card>

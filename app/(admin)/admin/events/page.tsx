@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback, useMemo, useEffect } from 'react'
 import { 
   Typography, 
   Card, 
@@ -32,12 +32,11 @@ import {
   FilterOutlined,
   ClockCircleOutlined,
   EnvironmentOutlined,
-  ExportOutlined,
   MailOutlined,
-  TeamOutlined
+  TeamOutlined,
+  EyeOutlined
 } from '@ant-design/icons'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import dayjs from 'dayjs'
 import { PageHeader, EventCalendar, CalendarEvent, PocContextCard } from '@/components'
 import { 
@@ -47,6 +46,7 @@ import {
   getKaupapa, 
   getClashesForEvent,
   createEvent,
+  updateEvent,
   deleteEvent,
   isMyEvent,
   CURRENT_KAUPAPA_ID,
@@ -69,15 +69,28 @@ type ViewMode = 'calendar' | 'list'
  * - Create modal: Quick event creation (opens from calendar click)
  */
 export default function EventsPage() {
-  const router = useRouter()
   const { message, modal } = App.useApp()
   
-  // View state
+  // View state - initialize from hash if present
   const [viewMode, setViewMode] = useState<ViewMode>('calendar')
   const [selectedKaupapa, setSelectedKaupapa] = useState<string[]>([])
   
-  // Create modal state
-  const [createModalOpen, setCreateModalOpen] = useState(false)
+  // Sync view mode with URL hash
+  useEffect(() => {
+    const hash = window.location.hash.replace('#', '')
+    if (hash === 'list' || hash === 'calendar') {
+      setViewMode(hash)
+    }
+  }, [])
+  
+  const handleViewModeChange = (mode: ViewMode) => {
+    setViewMode(mode)
+    window.history.pushState(null, '', `/admin/events#${mode}`)
+  }
+  
+  // Create/Edit modal state
+  const [eventModalOpen, setEventModalOpen] = useState(false)
+  const [editingEvent, setEditingEvent] = useState<Event | null>(null)
   const [form] = Form.useForm()
   
   // Event preview modal state
@@ -131,6 +144,7 @@ export default function EventsPage() {
   // Handle calendar date/time click - open create modal
   const handleDateClick = (date: Date, allDay: boolean) => {
     const d = dayjs(date)
+    setEditingEvent(null)
     form.resetFields()
     
     if (allDay) {
@@ -149,7 +163,33 @@ export default function EventsPage() {
       })
     }
     
-    setCreateModalOpen(true)
+    setEventModalOpen(true)
+  }
+
+  // Open edit modal with event pre-filled
+  const openEditModal = (event: Event) => {
+    setEditingEvent(event)
+    form.setFieldsValue({
+      title: event.title,
+      date: dayjs(event.date),
+      startTime: event.startTime ? dayjs(event.startTime, 'HH:mm') : null,
+      endTime: event.endTime ? dayjs(event.endTime, 'HH:mm') : null,
+      location: event.location,
+      description: event.description,
+    })
+    setEventModalOpen(true)
+  }
+
+  // Open create modal with defaults
+  const openCreateModal = () => {
+    setEditingEvent(null)
+    form.resetFields()
+    form.setFieldsValue({
+      date: dayjs(),
+      startTime: dayjs().hour(9).minute(0),
+      endTime: dayjs().hour(10).minute(0),
+    })
+    setEventModalOpen(true)
   }
 
   // Handle event click - show preview modal
@@ -169,21 +209,29 @@ export default function EventsPage() {
     : []
 
   // Handle create event
-  const handleCreateEvent = async () => {
+  const handleSaveEvent = async () => {
     try {
       const values = await form.validateFields()
       
-      createEvent({
+      const eventData = {
         title: values.title,
         description: values.description || '',
         location: values.location || '',
         date: values.date.format('YYYY-MM-DD'),
         startTime: values.startTime?.format('HH:mm'),
         endTime: values.endTime?.format('HH:mm'),
-      })
+      }
+
+      if (editingEvent) {
+        updateEvent(editingEvent.id, eventData)
+        message.success('Event updated successfully')
+      } else {
+        createEvent(eventData)
+        message.success('Event created successfully')
+      }
       
-      message.success('Event created successfully')
-      setCreateModalOpen(false)
+      setEventModalOpen(false)
+      setEditingEvent(null)
       form.resetFields()
       refresh()
     } catch (error) {
@@ -214,7 +262,8 @@ export default function EventsPage() {
     ? getClashesForEvent(
         formDate.format('YYYY-MM-DD'),
         formStartTime?.format('HH:mm'),
-        formEndTime?.format('HH:mm')
+        formEndTime?.format('HH:mm'),
+        editingEvent?.id // Exclude current event when editing
       )
     : []
 
@@ -225,7 +274,7 @@ export default function EventsPage() {
       dataIndex: 'title',
       key: 'title',
       render: (title: string, record: Event) => (
-        <Link href={`/admin/events/${record.id}`} style={{ fontWeight: 500 }}>
+        <Link href={`/admin/events/${record.id}`} style={{ fontWeight: 500, color: primary[500] }}>
           {title}
         </Link>
       ),
@@ -278,15 +327,24 @@ export default function EventsPage() {
     {
       title: 'Actions',
       key: 'actions',
-      width: 120,
+      width: 140,
       render: (_: unknown, record: Event) => (
         <Space>
-          <Tooltip title="View/Edit">
+          <Tooltip title="View">
+            <Link href={`/admin/events/${record.id}`}>
+              <Button 
+                type="text" 
+                size="small" 
+                icon={<EyeOutlined />}
+              />
+            </Link>
+          </Tooltip>
+          <Tooltip title="Edit">
             <Button 
               type="text" 
               size="small" 
               icon={<EditOutlined />}
-              onClick={() => router.push(`/admin/events/${record.id}`)}
+              onClick={() => openEditModal(record)}
             />
           </Tooltip>
           <Tooltip title="Delete">
@@ -313,15 +371,7 @@ export default function EventsPage() {
           <Button 
             type="primary" 
             icon={<PlusOutlined />}
-            onClick={() => {
-              form.resetFields()
-              form.setFieldsValue({
-                date: dayjs(),
-                startTime: dayjs().hour(9).minute(0),
-                endTime: dayjs().hour(10).minute(0),
-              })
-              setCreateModalOpen(true)
-            }}
+            onClick={openCreateModal}
           >
             Create Event
           </Button>
@@ -354,7 +404,7 @@ export default function EventsPage() {
           <Col>
             <Segmented
               value={viewMode}
-              onChange={(value) => setViewMode(value as ViewMode)}
+              onChange={(value) => handleViewModeChange(value as ViewMode)}
               options={[
                 { label: 'Calendar', value: 'calendar', icon: <CalendarOutlined /> },
                 { label: 'List', value: 'list', icon: <UnorderedListOutlined /> },
@@ -402,7 +452,7 @@ export default function EventsPage() {
               description="No events yet"
               image={Empty.PRESENTED_IMAGE_SIMPLE}
             >
-              <Button type="primary" onClick={() => setCreateModalOpen(true)}>
+              <Button type="primary" onClick={openCreateModal}>
                 Create your first event
               </Button>
             </Empty>
@@ -417,16 +467,17 @@ export default function EventsPage() {
         </Card>
       )}
 
-      {/* Create Event Modal */}
+      {/* Create/Edit Event Modal */}
       <Modal
-        title="Create Event"
-        open={createModalOpen}
-        onOk={handleCreateEvent}
+        title={editingEvent ? 'Edit Event' : 'Create Event'}
+        open={eventModalOpen}
+        onOk={handleSaveEvent}
         onCancel={() => {
-          setCreateModalOpen(false)
+          setEventModalOpen(false)
+          setEditingEvent(null)
           form.resetFields()
         }}
-        okText="Create Event"
+        okText={editingEvent ? 'Save Changes' : 'Create Event'}
         width={600}
       >
         <Form
@@ -540,14 +591,24 @@ export default function EventsPage() {
                 Close
               </Button>
               <Button
-                type="primary"
-                icon={<ExportOutlined />}
+                icon={<EditOutlined />}
                 onClick={() => {
-                  window.open(`/admin/events/${previewEvent?.id}`, '_blank')
+                  setPreviewModalOpen(false)
+                  if (previewEvent) {
+                    openEditModal(previewEvent)
+                  }
                 }}
               >
-                Open Full Details
+                Edit
               </Button>
+              <Link href={`/admin/events/${previewEvent?.id}`}>
+                <Button
+                  type="primary"
+                  icon={<EyeOutlined />}
+                >
+                  View Event
+                </Button>
+              </Link>
             </Space>
           ) : (
             <Space>

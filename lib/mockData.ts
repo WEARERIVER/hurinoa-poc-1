@@ -140,7 +140,7 @@ const addDays = (days: number) => {
 let events: Event[] = [
   // Current kaupapa events (Te Whānau Aroha)
   {
-    id: 'evt-1',
+    id: '1',
     title: 'Whānau Hui',
     description: 'Monthly gathering to discuss upcoming initiatives and share kai.',
     location: 'Community Hall, 123 Main St',
@@ -152,7 +152,7 @@ let events: Event[] = [
     updatedAt: new Date().toISOString(),
   },
   {
-    id: 'evt-2',
+    id: '2',
     title: 'Kapa Haka Practice',
     description: 'Weekly practice session for all ages.',
     location: 'School Gymnasium',
@@ -164,7 +164,7 @@ let events: Event[] = [
     updatedAt: new Date().toISOString(),
   },
   {
-    id: 'evt-3',
+    id: '3',
     title: 'Planning Workshop',
     description: 'Strategic planning for 2025 initiatives.',
     location: 'Online - Zoom',
@@ -178,7 +178,7 @@ let events: Event[] = [
   
   // Other kaupapa events (for clash detection)
   {
-    id: 'evt-4',
+    id: '4',
     title: 'Tamariki Day Out',
     description: 'Fun day for the kids.',
     location: 'Local Park',
@@ -190,7 +190,7 @@ let events: Event[] = [
     updatedAt: new Date().toISOString(),
   },
   {
-    id: 'evt-5',
+    id: '5',
     title: 'Wānanga',
     description: 'Educational workshop.',
     location: 'University Campus',
@@ -202,7 +202,7 @@ let events: Event[] = [
     updatedAt: new Date().toISOString(),
   },
   {
-    id: 'evt-6',
+    id: '6',
     title: 'Health Screening',
     description: 'Free community health checks.',
     location: 'Medical Centre',
@@ -214,7 +214,7 @@ let events: Event[] = [
     updatedAt: new Date().toISOString(),
   },
   {
-    id: 'evt-7',
+    id: '7',
     title: 'Hauora Hui',
     description: 'Wellbeing gathering.',
     location: 'Community Centre',
@@ -310,7 +310,7 @@ export function getClashesForEvent(date: string, startTime?: string, endTime?: s
 export function createEvent(data: Omit<Event, 'id' | 'kaupapa' | 'createdAt' | 'updatedAt'>): Event {
   const newEvent: Event = {
     ...data,
-    id: `evt-${Date.now()}`,
+    id: String(Date.now()),
     kaupapa: CURRENT_KAUPAPA_ID,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
