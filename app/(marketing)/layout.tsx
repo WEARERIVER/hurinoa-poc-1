@@ -68,9 +68,14 @@ export default function MarketingLayout({
               About
             </Button>
           </Link>
+          <Link href="/app">
+            <Button type="primary" style={{ fontWeight: 500 }}>
+              Uri
+            </Button>
+          </Link>
           <Link href="/admin">
             <Button type="primary" style={{ fontWeight: 500 }}>
-              Sign In
+              Contributor
             </Button>
           </Link>
         </Space>

@@ -5,14 +5,12 @@ import Link from 'next/link'
 import { 
   ArrowRightOutlined, 
   BulbOutlined, 
-  UserOutlined, 
   TeamOutlined, 
   SafetyCertificateOutlined,
   CalendarOutlined,
   ClockCircleOutlined,
   ThunderboltOutlined,
   CheckCircleOutlined,
-  RocketOutlined,
   CheckCircleFilled,
   CloseCircleFilled,
   WarningFilled
@@ -21,9 +19,20 @@ import { primary, secondary, tertiary, neutral, borderRadius } from '@/theme'
 
 const { Title, Text, Paragraph } = Typography
 
+const styles = `
+  .hover-card {
+    transition: all 0.3s ease;
+  }
+  .hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08) !important;
+  }
+`
+
 export default function ProjectStoryPage() {
   return (
     <div style={{ background: '#fff' }}>
+      <style>{styles}</style>
       
       {/* ================================================================== */}
       {/* HERO SECTION                                                       */}
@@ -289,15 +298,15 @@ export default function ProjectStoryPage() {
       {/* ================================================================== */}
       {/* MVP SCOPE                                                          */}
       {/* ================================================================== */}
-      <div style={{ padding: '100px 24px', background: neutral[50] }}>
+      <div style={{ padding: '100px 24px', background: '#fff' }}>
         <div style={{ maxWidth: 1000, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 64 }}>
             <Title level={2}>MVP Scope & Focus</Title>
             <Paragraph style={{ fontSize: 18, color: neutral[500], maxWidth: 800, margin: '0 auto' }}>
-              Based on feedback in our last workshop, we’ve refined the focus of this Proof of Concept (POC) to prioritise supporting Contributors to easily create events without clashes across entities.
+              This Proof of Concept (POC) is intentionally focused: helping Contributors create events with visibility of clashes across kaupapa.
             </Paragraph>
             <Paragraph style={{ fontSize: 18, color: neutral[500], maxWidth: 800, margin: '16px auto 0' }}>
-              While earlier thinking centred around personalised calendar views for Uri, the clearest and most pressing need expressed was <strong>"a way for Contributors to create events without double-ups or conflicts"</strong>.
+              We’ve deliberately deferred personalised calendar views for Uri in this phase so we can validate the core coordination workflow first.
             </Paragraph>
           </div>
 
@@ -305,8 +314,9 @@ export default function ProjectStoryPage() {
             <Col xs={24} md={12}>
               <Card 
                 title={<Space><CheckCircleFilled style={{ color: tertiary[500] }} /> In Scope (The Focus)</Space>} 
-                bordered={false} 
-                style={{ height: '100%', borderRadius: 16 }}
+                bordered
+                style={{ height: '100%', borderRadius: 16, border: `1px solid ${neutral[200]}`, boxShadow: 'none' }}
+                bodyStyle={{ padding: 32 }}
               >
                 <Paragraph type="secondary" style={{ marginBottom: 24 }}>
                   What we're delivering in the POC:
@@ -340,8 +350,9 @@ export default function ProjectStoryPage() {
             <Col xs={24} md={12}>
               <Card 
                 title={<Space><CloseCircleFilled style={{ color: secondary[500] }} /> Out of Scope (Deferred)</Space>} 
-                bordered={false} 
-                style={{ height: '100%', borderRadius: 16, opacity: 0.9 }}
+                bordered
+                style={{ height: '100%', borderRadius: 16, border: `1px solid ${neutral[200]}`, boxShadow: 'none' }}
+                bodyStyle={{ padding: 32 }}
               >
                 <Paragraph type="secondary" style={{ marginBottom: 24 }}>
                   What we are not including — yet:
@@ -399,45 +410,177 @@ export default function ProjectStoryPage() {
       </div>
 
       {/* ================================================================== */}
-      {/* FUTURE                                                             */}
+      {/* COMING SOON - GRID                                                 */}
       {/* ================================================================== */}
-      <div style={{ padding: '100px 24px', maxWidth: 800, margin: '0 auto' }}>
-        <Title level={2} style={{ marginBottom: 48, textAlign: 'center' }}>What's Coming Later</Title>
-        <Row gutter={[24, 24]}>
-          {[
-            { icon: <ClockCircleOutlined />, text: "RSVP and event reminders" },
-            { icon: <CalendarOutlined />, text: ".ics / calendar integration" },
-            { icon: <UserOutlined />, text: "Self-service registration" },
-            { icon: <ThunderboltOutlined />, text: "Reporting or summaries" }
-          ].map((item, i) => (
-            <Col xs={24} sm={12} key={i}>
-              <div style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: 16, 
-                fontSize: 16, 
-                color: neutral[700],
-                padding: 24,
-                background: neutral[50],
-                borderRadius: 12
-              }}>
-                <div style={{ color: primary[500], fontSize: 20 }}>{item.icon}</div>
-                <span style={{ fontWeight: 500 }}>{item.text}</span>
-              </div>
-            </Col>
-          ))}
-        </Row>
+      <div style={{ padding: '120px 24px', background: neutral[50] }}>
+        <div style={{ maxWidth: 1000, margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 80 }}>
+            <Space align="center" style={{ marginBottom: 16 }}>
+              <ClockCircleOutlined style={{ fontSize: 24, color: primary[400] }} />
+              <Text style={{ fontSize: 16, fontWeight: 600, color: primary[500], textTransform: 'uppercase', letterSpacing: 1 }}>Roadmap</Text>
+            </Space>
+            <Title level={2} style={{ fontSize: 42, marginTop: 16 }}>We're just getting started</Title>
+            <Paragraph style={{ fontSize: 18, color: neutral[500], maxWidth: 600, margin: '0 auto' }}>
+              Here is what we are working on next to make coordination even easier.
+            </Paragraph>
+          </div>
+
+          <Row gutter={[24, 24]}>
+            {[
+              { title: "RSVP & Reminders", icon: <ClockCircleOutlined />, desc: "Know who's coming and keep everyone in the loop." },
+              { title: "Calendar Sync", icon: <CalendarOutlined />, desc: "Sync events directly to your personal calendar (.ics)." },
+              { title: "Self Registration", icon: <TeamOutlined />, desc: "Easier onboarding for new whānau members." },
+              { title: "Smart Notifications", icon: <ThunderboltOutlined />, desc: "Get alerted via email or mobile when things change." },
+            ].map((item, index) => (
+              <Col xs={24} sm={12} key={index}>
+                <Card 
+                  className="hover-card"
+                  bordered={false}
+                  style={{ height: '100%', borderRadius: 16 }}
+                  bodyStyle={{ padding: 32 }}
+                >
+                  <div style={{ fontSize: 32, color: primary[500], marginBottom: 24 }}>{item.icon}</div>
+                  <Title level={4} style={{ marginBottom: 12 }}>{item.title}</Title>
+                  <Paragraph style={{ color: neutral[500], fontSize: 16, marginBottom: 0 }}>
+                    {item.desc}
+                  </Paragraph>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </div>
       </div>
 
       {/* ================================================================== */}
-      {/* CTA                                                                */}
+      {/* FINAL CTA                                                          */}
       {/* ================================================================== */}
-      <div style={{ padding: '40px 24px', textAlign: 'center', background: '#fff', paddingBottom: 100 }}>
-        <Link href="/dashboard">
-          <Button type="primary" size="large" style={{ height: 64, padding: '0 48px', fontSize: 20, borderRadius: borderRadius.full }}>
-            View the POC <ArrowRightOutlined />
-          </Button>
-        </Link>
+      <div style={{ 
+        padding: '80px 24px', 
+        background: neutral[900], 
+        textAlign: 'center',
+        color: '#fff'
+      }}>
+        <div style={{ maxWidth: 1000, margin: '0 auto' }}>
+          <Title level={2} style={{ color: '#fff', marginBottom: 12 }}>
+            Explore the POC
+          </Title>
+          <Paragraph style={{ color: neutral[400], fontSize: 18, marginBottom: 40 }}>
+            Jump into the story, or open the Contributor and Uri experiences.
+          </Paragraph>
+
+          <Row gutter={[24, 24]}>
+            <Col xs={24} md={8}>
+              <Card
+                className="hover-card"
+                bordered={false}
+                style={{ height: '100%', borderRadius: 16, background: neutral[800], textAlign: 'left' }}
+                bodyStyle={{ padding: 28 }}
+              >
+                <Space direction="vertical" size={16} style={{ width: '100%' }}>
+                  <Space align="center" size={12}>
+                    <div style={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: borderRadius.full,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      background: neutral[700],
+                      color: primary[300],
+                      fontSize: 18,
+                      flex: '0 0 auto'
+                    }}>
+                      <BulbOutlined />
+                    </div>
+                    <Text style={{ color: '#fff', fontSize: 16, fontWeight: 600 }}>About</Text>
+                  </Space>
+                  <Text style={{ color: neutral[400] }}>
+                    Read the vision, scope, and what we’re building next.
+                  </Text>
+                  <Link href="/about" style={{ alignSelf: 'flex-start' }}>
+                    <Button type="default">
+                      View About <ArrowRightOutlined />
+                    </Button>
+                  </Link>
+                </Space>
+              </Card>
+            </Col>
+
+            <Col xs={24} md={8}>
+              <Card
+                className="hover-card"
+                bordered={false}
+                style={{ height: '100%', borderRadius: 16, background: neutral[800], textAlign: 'left' }}
+                bodyStyle={{ padding: 28 }}
+              >
+                <Space direction="vertical" size={16} style={{ width: '100%' }}>
+                  <Space align="center" size={12}>
+                    <div style={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: borderRadius.full,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      background: neutral[700],
+                      color: tertiary[300],
+                      fontSize: 18,
+                      flex: '0 0 auto'
+                    }}>
+                      <SafetyCertificateOutlined />
+                    </div>
+                    <Text style={{ color: '#fff', fontSize: 16, fontWeight: 600 }}>Contributor</Text>
+                  </Space>
+                  <Text style={{ color: neutral[400] }}>
+                    Create and manage events, with soft clash visibility.
+                  </Text>
+                  <Link href="/admin" style={{ alignSelf: 'flex-start' }}>
+                    <Button type="primary">
+                      Open Contributor <ArrowRightOutlined />
+                    </Button>
+                  </Link>
+                </Space>
+              </Card>
+            </Col>
+
+            <Col xs={24} md={8}>
+              <Card
+                className="hover-card"
+                bordered={false}
+                style={{ height: '100%', borderRadius: 16, background: neutral[800], textAlign: 'left' }}
+                bodyStyle={{ padding: 28 }}
+              >
+                <Space direction="vertical" size={16} style={{ width: '100%' }}>
+                  <Space align="center" size={12}>
+                    <div style={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: borderRadius.full,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      background: neutral[700],
+                      color: secondary[300],
+                      fontSize: 18,
+                      flex: '0 0 auto'
+                    }}>
+                      <TeamOutlined />
+                    </div>
+                    <Text style={{ color: '#fff', fontSize: 16, fontWeight: 600 }}>Uri</Text>
+                  </Space>
+                  <Text style={{ color: neutral[400] }}>
+                    View the events and kaupapa relevant to you.
+                  </Text>
+                  <Link href="/app" style={{ alignSelf: 'flex-start' }}>
+                    <Button type="primary">
+                      Open Uri <ArrowRightOutlined />
+                    </Button>
+                  </Link>
+                </Space>
+              </Card>
+            </Col>
+          </Row>
+        </div>
       </div>
 
     </div>
