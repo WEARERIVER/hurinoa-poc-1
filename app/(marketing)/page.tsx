@@ -23,59 +23,47 @@ import { CSSProperties } from 'react'
 
 const { Title, Paragraph, Text } = Typography
 
-// Animation styles
-const styles = `
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
+// Smooth scroll helper (works around Ant Design Layout scroll context issues)
+const smoothScrollTo = (elementId: string) => {
+  const element = document.getElementById(elementId)
+  if (!element) return
+  
+  const targetPosition = element.getBoundingClientRect().top + window.pageYOffset
+  const startPosition = window.pageYOffset
+  const distance = targetPosition - startPosition
+  const duration = 500
+  let startTime: number | null = null
+  
+  const easeOutQuad = (t: number) => t * (2 - t)
+  
+  const animate = (currentTime: number) => {
+    if (startTime === null) startTime = currentTime
+    const elapsed = currentTime - startTime
+    const progress = Math.min(elapsed / duration, 1)
+    const easeProgress = easeOutQuad(progress)
+    
+    const scrollTo = startPosition + distance * easeProgress
+    document.documentElement.scrollTop = scrollTo
+    document.body.scrollTop = scrollTo
+    
+    if (elapsed < duration) {
+      requestAnimationFrame(animate)
     }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
   }
   
-  @keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-    100% { transform: translateY(0px); }
-  }
-
-  .animate-fade-up {
-    animation: fadeInUp 0.8s ease-out forwards;
-    opacity: 0;
-  }
-  
-  .delay-100 { animation-delay: 0.1s; }
-  .delay-200 { animation-delay: 0.2s; }
-  .delay-300 { animation-delay: 0.3s; }
-  
-  .hover-card {
-    transition: all 0.3s ease;
-  }
-  .hover-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.08) !important;
-  }
-
-  .gradient-text {
-    background: linear-gradient(135deg, ${primary[600]}, ${secondary[500]});
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-`
+  requestAnimationFrame(animate)
+}
 
 export default function AboutPage() {
   return (
     <div style={{ background: '#fff', overflowX: 'hidden' }}>
-      <style>{styles}</style>
       
       {/* ================================================================== */}
       {/* HERO & FEATURES WRAPPER                                            */}
       {/* ================================================================== */}
-      <div style={{ 
-        background: primary[50],
+      <div className="animate-gradient" style={{ 
+        backgroundColor: neutral[50],
+        backgroundImage: `linear-gradient(-45deg, ${neutral[50]}, ${primary[50]}, ${secondary[50]}, ${neutral[50]})`,
         position: 'relative',
         overflow: 'hidden'
       }}>
@@ -90,7 +78,7 @@ export default function AboutPage() {
         position: 'relative'
       }}>
         {/* Decorative background elements */}
-        <div style={{
+        <div className="animate-float" style={{
           position: 'absolute',
           top: '10%',
           left: '5%',
@@ -99,7 +87,7 @@ export default function AboutPage() {
           background: secondary[100],
           borderRadius: '50%',
           filter: 'blur(80px)',
-          opacity: 0.5,
+          opacity: 0.3,
           zIndex: 0
         }} />
         
@@ -119,14 +107,14 @@ export default function AboutPage() {
           
           <Title className="animate-fade-up delay-100" style={{ 
             fontSize: 'clamp(48px, 8vw, 84px)', // Responsive massive font
-            fontWeight: 800,
+            fontWeight: 700,
             lineHeight: 1.1,
             marginBottom: 24,
             letterSpacing: '-0.02em',
             color: neutral[900]
           }}>
             Bring clarity to your <br/>
-            <span className="gradient-text">kaupapa schedule.</span>
+            <span className="text-gradient">kaupapa schedule.</span>
           </Title>
           
           <Paragraph className="animate-fade-up delay-200" style={{ 
@@ -137,10 +125,10 @@ export default function AboutPage() {
             margin: '0 auto 48px',
             fontWeight: 400
           }}>
-            Built primarily for Contributors coordinating events across communities, with Uri benefiting through clearer event visibility.
+            Built for Contributors coordinating events across communities, so Uri get clearer event visibility.
           </Paragraph>
 
-          <div className="animate-fade-up delay-200" style={{ maxWidth: 760, margin: '-28px auto 40px' }}>
+          <div className="animate-fade-up delay-300" style={{ maxWidth: 760, margin: '-28px auto 40px' }}>
             <Space direction="vertical" size={8} style={{ width: '100%' }}>
               <Text style={{ color: neutral[600] }}>
                 <Text strong>Current phase:</Text> MVP (admin-first coordination POC).
@@ -154,11 +142,12 @@ export default function AboutPage() {
             </Space>
           </div>
           
-          <Space size="large" wrap className="animate-fade-up delay-300" style={{ justifyContent: 'center' }}>
+          <Space size="large" wrap className="animate-fade-up delay-400" style={{ justifyContent: 'center' }}>
             <Button 
               type="primary" 
               size="large" 
-              onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
+              className="hover-scale"
+              onClick={() => smoothScrollTo('features')}
               style={{ 
                 height: 64, 
                 padding: '0 48px', 
@@ -169,22 +158,11 @@ export default function AboutPage() {
             >
               Learn More
             </Button>
-            <Link href="/">
-              <Button size="large" type="text" style={{ 
-                height: 64, 
-                padding: '0 32px', 
-                fontSize: 18,
-                color: neutral[600],
-                background: neutral[100],
-                borderRadius: borderRadius.full
-              }}>
-                Get Started
-              </Button>
-            </Link>
             <Button
               size="large"
               type="text"
-              onClick={() => document.getElementById('our-vision')?.scrollIntoView({ behavior: 'smooth' })}
+              className="hover-scale"
+              onClick={() => smoothScrollTo('our-vision')}
               style={{
                 height: 64,
                 padding: '0 32px',
@@ -239,7 +217,7 @@ export default function AboutPage() {
             </div>
           </Col>
           <Col xs={24} md={12}>
-            <div className="hover-card" style={{ 
+            <div className="hover-lift" style={{ 
               background: '#fff',
               padding: 48,
               borderRadius: 32,
@@ -247,7 +225,7 @@ export default function AboutPage() {
               border: `1px solid ${neutral[100]}`,
               textAlign: 'center'
             }}>
-              <div style={{ 
+              <div className="animate-float" style={{ 
                 width: 120, 
                 height: 120, 
                 background: primary[50], 
@@ -257,8 +235,7 @@ export default function AboutPage() {
                 justifyContent: 'center',
                 margin: '0 auto 32px',
                 color: primary[500],
-                fontSize: 48,
-                animation: 'float 6s ease-in-out infinite'
+                fontSize: 48
               }}>
                 <RocketOutlined />
               </div>
@@ -302,7 +279,7 @@ export default function AboutPage() {
             </div>
           </Col>
           <Col xs={24} md={12}>
-            <div className="hover-card" style={{ 
+            <div className="hover-lift" style={{ 
               background: '#fff',
               padding: 48,
               borderRadius: 32,
@@ -310,7 +287,7 @@ export default function AboutPage() {
               border: `1px solid ${neutral[100]}`,
               textAlign: 'center'
             }}>
-              <div style={{ 
+              <div className="animate-float" style={{ 
                 width: 120, 
                 height: 120, 
                 background: secondary[50], 
@@ -321,7 +298,7 @@ export default function AboutPage() {
                 margin: '0 auto 32px',
                 color: secondary[500],
                 fontSize: 48,
-                animation: 'float 6s ease-in-out infinite 1s'
+                animationDelay: '1s'
               }}>
                 <HeartOutlined />
               </div>
@@ -350,6 +327,7 @@ export default function AboutPage() {
             {/* Feature 1 */}
             <Col xs={24} md={8}>
               <Card 
+                className="hover-lift"
                 bordered={false} 
                 style={{ height: '100%', textAlign: 'center', boxShadow: 'none' }}
                 bodyStyle={{ padding: 0 }}
@@ -378,6 +356,7 @@ export default function AboutPage() {
             {/* Feature 2 */}
             <Col xs={24} md={8}>
               <Card 
+                className="hover-lift"
                 bordered={false} 
                 style={{ height: '100%', textAlign: 'center', boxShadow: 'none' }}
                 bodyStyle={{ padding: 0 }}
@@ -406,6 +385,7 @@ export default function AboutPage() {
             {/* Feature 3 */}
             <Col xs={24} md={8}>
               <Card 
+                className="hover-lift"
                 bordered={false} 
                 style={{ height: '100%', textAlign: 'center', boxShadow: 'none' }}
                 bodyStyle={{ padding: 0 }}
@@ -459,7 +439,7 @@ export default function AboutPage() {
             ].map((item, index) => (
               <Col xs={24} sm={12} key={index}>
                 <Card 
-                  className="hover-card"
+                  className="hover-lift"
                   bordered={false}
                   style={{ height: '100%', borderRadius: 16 }}
                   bodyStyle={{ padding: 32 }}
@@ -826,7 +806,7 @@ export default function AboutPage() {
           <Row gutter={[24, 24]}>
             <Col xs={24} md={12}>
               <Card
-                className="hover-card"
+                className="hover-lift"
                 bordered={false}
                 style={{ height: '100%', borderRadius: 16, background: neutral[800], textAlign: 'left' }}
                 bodyStyle={{ padding: 28 }}
@@ -863,7 +843,7 @@ export default function AboutPage() {
 
             <Col xs={24} md={12}>
               <Card
-                className="hover-card"
+                className="hover-lift"
                 bordered={false}
                 style={{ height: '100%', borderRadius: 16, background: neutral[800], textAlign: 'left' }}
                 bodyStyle={{ padding: 28 }}
