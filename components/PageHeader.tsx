@@ -1,7 +1,7 @@
 'use client'
 
 import { Typography, Breadcrumb, Grid } from 'antd'
-import { HomeOutlined, RightOutlined } from '@ant-design/icons'
+import { RightOutlined } from '@ant-design/icons'
 import Link from 'next/link'
 import { neutral, layout, fontSize, borderRadius } from '@/theme'
 
@@ -61,30 +61,21 @@ export function PageHeader({
   const screens = useBreakpoint()
   const isMobile = !screens.md
 
-  // Build breadcrumb items with Home as first item
-  const breadcrumbItems = [
-    {
-      title: (
-        <Link href="/dashboard" style={{ color: neutral[500] }}>
-          <HomeOutlined />
+  // Build breadcrumb items (no home icon - each app section has its own root)
+  const breadcrumbItems = breadcrumbs.map((item, index) => {
+    const isLast = index === breadcrumbs.length - 1
+    return {
+      title: isLast ? (
+        <span style={{ color: neutral[700] }}>{item.label}</span>
+      ) : item.href ? (
+        <Link href={item.href} style={{ color: neutral[500] }}>
+          {item.label}
         </Link>
+      ) : (
+        <span style={{ color: neutral[500] }}>{item.label}</span>
       ),
-    },
-    ...breadcrumbs.map((item, index) => {
-      const isLast = index === breadcrumbs.length - 1
-      return {
-        title: isLast ? (
-          <span style={{ color: neutral[700] }}>{item.label}</span>
-        ) : item.href ? (
-          <Link href={item.href} style={{ color: neutral[500] }}>
-            {item.label}
-          </Link>
-        ) : (
-          <span style={{ color: neutral[500] }}>{item.label}</span>
-        ),
-      }
-    }),
-  ]
+    }
+  })
 
   return (
     <div 
