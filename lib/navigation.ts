@@ -37,7 +37,7 @@ export const contributorNavigation: NavItem[] = [
     key: 'admin-events',
     path: '/admin/events',
     label: 'Events',
-    description: 'Create and manage kaupapa events',
+    description: 'Create and manage community events',
     icon: CalendarOutlined,
   },
   {
@@ -62,14 +62,14 @@ export const uriNavigation: NavItem[] = [
     key: 'app-dashboard',
     path: '/app',
     label: 'Dashboard',
-    description: 'Your kaupapa overview',
+    description: 'Your community overview',
     icon: AppstoreOutlined,
   },
   {
     key: 'app-events',
     path: '/app/events',
     label: 'Events',
-    description: 'View events from your kaupapa',
+    description: 'View events from your communities',
     icon: EyeOutlined,
   },
   {

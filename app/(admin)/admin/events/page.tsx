@@ -378,7 +378,7 @@ export default function EventsPage() {
     <>
       <PageHeader
         title="Events"
-        description="Create and manage events for your kaupapa"
+        description="Create and manage events for your community"
         breadcrumbs={[{ label: 'Dashboard', href: '/admin' }, { label: 'Events' }]}
         actions={
           <Button 
